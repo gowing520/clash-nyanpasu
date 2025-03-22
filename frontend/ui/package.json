@@ -34,7 +34,7 @@
     "react-error-boundary": "5.0.0",
     "react-i18next": "15.4.1",
     "react-use": "17.6.0",
-    "tailwindcss": "4.0.14",
+    "tailwindcss": "4.0.15",
     "vite": "6.2.2",
     "vite-tsconfig-paths": "5.1.4"
   },
@@ -43,7 +43,7 @@
     "@types/d3-interpolate-path": "2.0.3",
     "clsx": "2.1.1",
     "d3-interpolate-path": "2.3.0",
-    "sass-embedded": "1.85.1",
+    "sass-embedded": "1.86.0",
     "tailwind-merge": "3.0.2",
     "typescript-plugin-css-modules": "5.1.0",
     "vite-plugin-dts": "4.5.3"
