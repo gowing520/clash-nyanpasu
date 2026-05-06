@@ -1,44 +1,38 @@
 import { isEqual } from 'lodash-es'
 import { editor } from 'monaco-editor'
-import { ComponentProps, useCallback, useEffect, useRef, useState } from 'react'
-import { z } from 'zod'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import z from 'zod'
 import { useBlockTask } from '@/components/providers/block-task-provider'
 import { useExperimentalThemeContext } from '@/components/providers/theme-provider'
-import { Button } from '@/components/ui/button'
 import { useLockFn } from '@/hooks/use-lock-fn'
 import { m } from '@/paraglide/messages'
+import { message } from '@/utils/notification'
+import { commands, useProfileContent } from '@interface/ipc'
 import MonacoEditor from '@monaco-editor/react'
-import { commands, useProfileContent } from '@nyanpasu/interface'
 import { cn } from '@nyanpasu/utils'
 import { createFileRoute } from '@tanstack/react-router'
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
-import { ask, message } from '@tauri-apps/plugin-dialog'
-import Chip from './_modules/chip'
-import Header from './_modules/header'
-import { useCurrentProfile } from './_modules/hooks'
-import LoadingSkeleton from './_modules/loading-skeleton'
-import { beforeEditorMount, MONACO_FONT_FAMILY } from './_modules/utils'
+import { ask } from '@tauri-apps/plugin-dialog'
+import ActionButton from '../_modules/action-button'
+import Chip from '../_modules/chip'
+import Header from '../_modules/header'
+import { useCurrentProfile } from '../_modules/hooks'
+import LoadingSkeleton from '../_modules/loading-skeleton'
+import { beforeEditorMount, MONACO_FONT_FAMILY } from '../_modules/utils'
 
 const currentWindow = getCurrentWebviewWindow()
 
-export const Route = createFileRoute('/(editor)/editor/')({
+export const Route = createFileRoute('/(editor)/editor/profile/')({
   component: RouteComponent,
   validateSearch: z.object({
     uid: z.string(),
   }),
 })
 
-const ActionButton = ({
-  className,
-  ...props
-}: ComponentProps<typeof Button>) => {
-  return <Button className={cn('h-8 min-w-0 px-3', className)} {...props} />
-}
-
 function RouteComponent() {
-  const { themeMode } = useExperimentalThemeContext()
-
   const { uid } = Route.useSearch()
+
+  const { themeMode } = useExperimentalThemeContext()
 
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
 
@@ -64,7 +58,7 @@ function RouteComponent() {
 
     const editorHasError =
       editorMarks.current.length > 0 &&
-      editorMarks.current.some((m) => m.severity === 8)
+      editorMarks.current.some((marker) => marker.severity === 8)
 
     if (editorHasError) {
       message(m.editor_validate_error_message(), {
